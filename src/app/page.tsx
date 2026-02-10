@@ -19,8 +19,12 @@ export default function Home() {
   const fetchVerse = useCallback(async (ch: number, v: number) => {
     setLoading(true);
     setError(null);
+    const minDelay = new Promise((r) => setTimeout(r, 800));
     try {
-      const res = await fetch(`/api/verse?chapter=${ch}&verse=${v}`);
+      const [res] = await Promise.all([
+        fetch(`/api/verse?chapter=${ch}&verse=${v}`),
+        minDelay,
+      ]);
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || 'Failed to fetch verse');
