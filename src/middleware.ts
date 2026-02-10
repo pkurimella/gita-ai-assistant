@@ -1,9 +1,32 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // ---------------------------------------------------------------------------
+  // Admin route protection (cookie-existence check only — Edge Runtime can't
+  // access the in-memory session Map; full validation happens in API routes)
+  // ---------------------------------------------------------------------------
+
+  const isAdminPage = pathname.startsWith('/admin') && pathname !== '/admin/login';
+  const isAdminApi = pathname.startsWith('/api/admin') && pathname !== '/api/admin/auth';
+
+  const sessionCookie = request.cookies.get('admin_session')?.value;
+
+  if (isAdminPage && !sessionCookie) {
+    return NextResponse.redirect(new URL('/admin/login', request.url));
+  }
+
+  if (isAdminApi && !sessionCookie) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Standard security headers
+  // ---------------------------------------------------------------------------
+
   const response = NextResponse.next();
 
-  // Security headers
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-XSS-Protection', '1; mode=block');
@@ -11,7 +34,7 @@ export function middleware(request: NextRequest) {
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
   // CORS protection for API routes
-  if (request.nextUrl.pathname.startsWith('/api/')) {
+  if (pathname.startsWith('/api/')) {
     const origin = request.headers.get('origin');
     const host = request.headers.get('host');
     if (origin && host) {

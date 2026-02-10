@@ -29,34 +29,25 @@ export function VerseNavigation({
   };
 
   return (
-    <nav className="space-y-3">
-      {/* Discover button */}
-      <div className="flex justify-center">
-        <button
-          onClick={handleDiscover}
-          className="group min-h-[44px] px-5 py-2 rounded-full bg-gradient-to-r from-saffron to-saffron-dark text-white font-serif font-semibold text-sm shadow-md hover:shadow-lg hover:brightness-110 transition-all duration-300"
-        >
-          <span className="inline-block transition-transform duration-500 group-hover:rotate-180">✦</span>
-          {' '}Discover New Verse{' '}
-          <span className="inline-block transition-transform duration-500 group-hover:rotate-180">✦</span>
-        </button>
-      </div>
-
+    <nav className="space-y-1.5">
       {/* Navigation row */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Prev button */}
         <button
           onClick={() => prev && onNavigate(prev.chapter, prev.verse)}
           disabled={!prev}
-          className="min-h-[44px] px-3 py-2 text-sm rounded-lg border border-gold bg-parchment-light hover:bg-gold-light text-krishna-blue disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium"
+          className="min-h-[44px] min-w-[44px] px-2 sm:px-3 py-2 text-sm rounded-lg border border-gold bg-parchment-light hover:bg-gold-light text-krishna-blue disabled:opacity-40 disabled:cursor-not-allowed transition-all font-serif hover:scale-105 active:scale-95"
         >
-          &larr; Prev
+          <span>&larr;</span>
+          <span className="hidden sm:inline"> Prev</span>
         </button>
 
-        <div className="flex items-center gap-2 flex-wrap justify-center">
+        {/* Chapter select */}
+        <div className="relative flex-1 min-w-0">
           <select
             value={chapter}
             onChange={(e) => onNavigate(parseInt(e.target.value), 1)}
-            className="min-h-[44px] px-2 py-1.5 text-sm rounded-lg border border-gold bg-parchment-light text-krishna-blue focus:outline-none focus:ring-2 focus:ring-saffron/50"
+            className="w-full appearance-none min-h-[44px] pr-7 pl-2.5 py-1.5 text-sm rounded-lg border border-gold bg-parchment-light text-krishna-blue font-serif truncate focus:outline-none focus:ring-2 focus:ring-saffron/40 cursor-pointer"
           >
             {CHAPTERS.map((ch) => (
               <option key={ch.number} value={ch.number}>
@@ -64,13 +55,25 @@ export function VerseNavigation({
               </option>
             ))}
           </select>
+          <svg
+            className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none w-3.5 h-3.5 text-gold"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            <path d="M2 4l4 4 4-4" />
+          </svg>
+        </div>
 
-          <span className="text-gold">:</span>
+        <span className="text-gold font-serif">:</span>
 
+        {/* Verse select */}
+        <div className="relative w-[5.5rem] sm:w-28">
           <select
             value={verse}
             onChange={(e) => onNavigate(chapter, parseInt(e.target.value))}
-            className="min-h-[44px] px-2 py-1.5 text-sm rounded-lg border border-gold bg-parchment-light text-krishna-blue focus:outline-none focus:ring-2 focus:ring-saffron/50"
+            className="w-full appearance-none min-h-[44px] pr-7 pl-2.5 py-1.5 text-sm rounded-lg border border-gold bg-parchment-light text-krishna-blue font-serif focus:outline-none focus:ring-2 focus:ring-saffron/40 cursor-pointer"
           >
             {currentChapter &&
               Array.from(
@@ -82,16 +85,44 @@ export function VerseNavigation({
                 </option>
               ))}
           </select>
+          <svg
+            className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none w-3.5 h-3.5 text-gold"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            <path d="M2 4l4 4 4-4" />
+          </svg>
         </div>
 
+        {/* Next button */}
         <button
           onClick={() => next && onNavigate(next.chapter, next.verse)}
           disabled={!next}
-          className="min-h-[44px] px-3 py-2 text-sm rounded-lg border border-gold bg-parchment-light hover:bg-gold-light text-krishna-blue disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium"
+          className="min-h-[44px] min-w-[44px] px-2 sm:px-3 py-2 text-sm rounded-lg border border-gold bg-parchment-light hover:bg-gold-light text-krishna-blue disabled:opacity-40 disabled:cursor-not-allowed transition-all font-serif hover:scale-105 active:scale-95"
         >
-          Next &rarr;
+          <span className="hidden sm:inline">Next </span>
+          <span>&rarr;</span>
+        </button>
+
+        {/* Discover (random verse) button */}
+        <button
+          onClick={handleDiscover}
+          className="min-h-[44px] min-w-[44px] px-2.5 rounded-lg bg-gradient-to-br from-saffron to-saffron-dark text-white font-sanskrit text-lg shadow-md hover:animate-glow-saffron hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center"
+          aria-label="Discover a random verse"
+          title="Discover a random verse"
+        >
+          {'\u0950'}
         </button>
       </div>
+
+      {/* Chapter meaning subtitle */}
+      {currentChapter && (
+        <p className="text-center text-xs text-blue-muted font-serif italic">
+          {currentChapter.meaning}
+        </p>
+      )}
     </nav>
   );
 }

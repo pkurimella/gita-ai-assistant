@@ -29,7 +29,14 @@
       "Bash(netstat:*)",
       "Bash(taskkill:*)",
       "Bash(echo:*)",
-      "Bash(printenv:*)"
+      "Bash(printenv:*)",
+      "Bash(npm test:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npx vitest:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:docs.anthropic.com)"
     ]
   }
 }

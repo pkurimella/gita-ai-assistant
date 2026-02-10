@@ -11,7 +11,11 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "heroku-postbuild": "npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static"
+    "generate-verses": "tsx scripts/generate-verses.ts submit",
+    "generate-verses:status": "tsx scripts/generate-verses.ts status",
+    "generate-verses:collect": "tsx scripts/generate-verses.ts collect",
+    "generate-verses:sequential": "tsx scripts/generate-verses.ts sequential",
+    "heroku-postbuild": "npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static && cp -r data .next/standalone/data"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.40",
@@ -22,6 +26,7 @@
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.52.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -29,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
+    "tsx": "^4.19.0",
     "typescript": "^5",
     "vitest": "^4.0.18"
   }

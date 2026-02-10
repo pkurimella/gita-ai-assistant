@@ -4,16 +4,17 @@ import { useState, useEffect, useCallback } from 'react';
 import { VerseDisplay } from '@/components/VerseDisplay';
 import { VerseNavigation } from '@/components/VerseNavigation';
 import { ChatPanel } from '@/components/ChatPanel';
+import { MobileChatSheet } from '@/components/MobileChatSheet';
 import { getRandomVerse } from '@/lib/random-verse';
 import type { VerseData } from '@/types/verse';
 
 export default function Home() {
-  const [initial] = useState(() => getRandomVerse());
-  const [chapter, setChapter] = useState(initial.chapter);
-  const [verse, setVerse] = useState(initial.verse);
+  const [chapter, setChapter] = useState(1);
+  const [verse, setVerse] = useState(1);
   const [verseData, setVerseData] = useState<VerseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [initialized, setInitialized] = useState(false);
 
   const fetchVerse = useCallback(async (ch: number, v: number) => {
     setLoading(true);
@@ -32,6 +33,16 @@ export default function Home() {
       setLoading(false);
     }
   }, []);
+
+  // Pick random verse on client mount only (avoids SSR/hydration mismatch)
+  useEffect(() => {
+    if (!initialized) {
+      const random = getRandomVerse();
+      setChapter(random.chapter);
+      setVerse(random.verse);
+      setInitialized(true);
+    }
+  }, [initialized]);
 
   useEffect(() => {
     fetchVerse(chapter, verse);
@@ -76,11 +87,14 @@ export default function Home() {
           />
         </div>
 
-        {/* Right panel: Chat */}
-        <div className="w-full h-[60vh] lg:h-auto lg:w-[440px] lg:max-h-[calc(100vh-80px)] flex flex-col border-t lg:border-t-0 border-gold/30 bg-parchment-light/50">
+        {/* Desktop chat sidebar — hidden on mobile */}
+        <div className="hidden lg:flex w-[440px] max-h-[calc(100vh-80px)] flex-col border-gold/30 bg-parchment-light/50">
           <ChatPanel verseData={verseData} />
         </div>
       </div>
+
+      {/* Mobile chat FAB + bottom sheet — hidden on desktop */}
+      <MobileChatSheet verseData={verseData} />
     </main>
   );
 }

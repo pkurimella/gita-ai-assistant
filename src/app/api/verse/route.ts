@@ -2,6 +2,8 @@ import { generateText } from 'ai';
 import { anthropic } from '@/lib/ai-provider';
 import { getVerseGenerationPrompt } from '@/lib/system-prompts';
 import { isValidVerse } from '@/lib/gita-metadata';
+import { readVerseFile } from '@/lib/verse-loader';
+import { recordEvent } from '@/lib/telemetry';
 import { InMemoryRateLimiter } from '@/lib/rate-limiter';
 import { NextRequest } from 'next/server';
 
@@ -22,6 +24,8 @@ function cleanJsonResponse(text: string): string {
 }
 
 export async function GET(request: NextRequest) {
+  const startTime = Date.now();
+
   // Rate limiting
   const ip = getClientIp(request);
   const { allowed, resetMs } = limiter.check(ip);
@@ -43,8 +47,29 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Cache-first: check pre-generated verse files
+  const cached = readVerseFile(chapter, verse);
+  if (cached) {
+    recordEvent({
+      timestamp: new Date().toISOString(),
+      type: 'verse',
+      chapter,
+      verse,
+      inputTokens: null,
+      outputTokens: null,
+      totalTokens: null,
+      durationMs: Date.now() - startTime,
+      ip,
+      model: 'cache',
+      status: 'success',
+      cacheHit: true,
+    });
+    return Response.json(cached);
+  }
+
+  // Fallback: generate via Claude API
   try {
-    const { text } = await generateText({
+    const { text, usage } = await generateText({
       model: anthropic('claude-sonnet-4-5-20250929'),
       prompt: getVerseGenerationPrompt(chapter, verse),
       maxOutputTokens: 4096,
@@ -52,9 +77,42 @@ export async function GET(request: NextRequest) {
     });
 
     const verseData = JSON.parse(cleanJsonResponse(text));
+
+    recordEvent({
+      timestamp: new Date().toISOString(),
+      type: 'verse',
+      chapter,
+      verse,
+      inputTokens: usage?.inputTokens ?? null,
+      outputTokens: usage?.outputTokens ?? null,
+      totalTokens: (usage?.inputTokens != null && usage?.outputTokens != null) ? usage.inputTokens + usage.outputTokens : null,
+      durationMs: Date.now() - startTime,
+      ip,
+      model: 'claude-sonnet-4-5-20250929',
+      status: 'success',
+      cacheHit: false,
+    });
+
     return Response.json(verseData);
   } catch (error) {
     console.error('Verse generation error:', error);
+
+    recordEvent({
+      timestamp: new Date().toISOString(),
+      type: 'verse',
+      chapter,
+      verse,
+      inputTokens: null,
+      outputTokens: null,
+      totalTokens: null,
+      durationMs: Date.now() - startTime,
+      ip,
+      model: 'claude-sonnet-4-5-20250929',
+      status: 'error',
+      cacheHit: false,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+    });
+
     return Response.json(
       { error: 'Failed to generate verse data. Please try again.' },
       { status: 500 }

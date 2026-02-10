@@ -4,6 +4,7 @@ import { getChatSystemPrompt } from '@/lib/system-prompts';
 import { validateChatMessage } from '@/lib/input-validation';
 import { validateVerseReferences } from '@/lib/output-validation';
 import { isValidVerse } from '@/lib/gita-metadata';
+import { recordEvent } from '@/lib/telemetry';
 import { InMemoryRateLimiter } from '@/lib/rate-limiter';
 
 const limiter = new InMemoryRateLimiter(60_000, 20); // 20 req/min per IP
@@ -16,6 +17,8 @@ function getClientIp(req: Request): string {
 }
 
 export async function POST(req: Request) {
+  const startTime = Date.now();
+
   // Rate limiting
   const ip = getClientIp(req);
   const { allowed, resetMs } = limiter.check(ip);
@@ -74,7 +77,8 @@ export async function POST(req: Request) {
     messages: await convertToModelMessages(messages),
     maxOutputTokens: 2000,
     temperature: 0.7,
-    onFinish: ({ text }) => {
+    onFinish: ({ text, usage }) => {
+      // Output validation
       const outputValidation = validateVerseReferences(text);
       if (!outputValidation.valid) {
         console.warn(
@@ -82,6 +86,21 @@ export async function POST(req: Request) {
           outputValidation.invalidRefs
         );
       }
+
+      // Telemetry
+      recordEvent({
+        timestamp: new Date().toISOString(),
+        type: 'chat',
+        chapter: verseContext.chapter,
+        verse: verseContext.verse,
+        inputTokens: usage?.inputTokens ?? null,
+        outputTokens: usage?.outputTokens ?? null,
+        totalTokens: (usage?.inputTokens != null && usage?.outputTokens != null) ? usage.inputTokens + usage.outputTokens : null,
+        durationMs: Date.now() - startTime,
+        ip,
+        model: 'claude-sonnet-4-5-20250929',
+        status: 'success',
+      });
     },
   });
 
