@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:ai-sdk.dev)",
+      "WebFetch(domain:www.isvara.org)",
+      "WebFetch(domain:www.anthropic.com)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout 15 npm run dev:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial scaffold: Next.js 16 + TypeScript + Tailwind + Vercel AI SDK\n\nProject setup with:\n- Next.js 16.1.6 \\(App Router, TypeScript, Tailwind CSS\\)\n- Vercel AI SDK \\(ai, @ai-sdk/react, @ai-sdk/anthropic\\)\n- Project planning docs \\(CLAUDE.md, PRD.md, TASKS.md\\)\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}
