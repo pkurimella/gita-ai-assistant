@@ -2,6 +2,7 @@
 
 import type { VerseData } from '@/types/verse';
 import { OrnamentalDivider } from './OrnamentalDivider';
+import { SacredLoader } from './SacredLoader';
 
 interface VerseDisplayProps {
   verseData: VerseData | null;
@@ -11,15 +12,7 @@ interface VerseDisplayProps {
 
 export function VerseDisplay({ verseData, loading, error }: VerseDisplayProps) {
   if (loading) {
-    return (
-      <div className="animate-pulse space-y-6 mt-6">
-        <div className="h-6 bg-vellum/60 rounded w-3/4" />
-        <div className="h-28 bg-vellum/40 rounded-lg" />
-        <div className="h-4 bg-vellum/40 rounded w-1/2" />
-        <div className="h-20 bg-vellum/40 rounded" />
-        <div className="h-36 bg-vellum/40 rounded" />
-      </div>
-    );
+    return <SacredLoader />;
   }
 
   if (error) {

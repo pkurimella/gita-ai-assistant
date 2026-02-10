@@ -77,3 +77,31 @@ body {
 .verse-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--color-saffron);
 }
+
+/* Sacred loader animations */
+@keyframes om-pulse {
+  0%, 100% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 144, 43, 0.3); }
+  50% { transform: scale(1.08); text-shadow: 0 0 25px rgba(255, 144, 43, 0.6), 0 0 50px rgba(212, 165, 116, 0.3); }
+}
+
+@keyframes chakra-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes quote-fade {
+  0%, 100% { opacity: 0; }
+  15%, 85% { opacity: 1; }
+}
+
+.animate-om-pulse {
+  animation: om-pulse 3s ease-in-out infinite;
+}
+
+.animate-chakra-rotate {
+  animation: chakra-rotate 8s linear infinite;
+}
+
+.animate-quote-fade {
+  animation: quote-fade 4s ease-in-out;
+}

@@ -2,7 +2,16 @@ import { generateText } from 'ai';
 import { anthropic } from '@/lib/ai-provider';
 import { getVerseGenerationPrompt } from '@/lib/system-prompts';
 import { isValidVerse } from '@/lib/gita-metadata';
+import { InMemoryRateLimiter } from '@/lib/rate-limiter';
 import { NextRequest } from 'next/server';
+
+const limiter = new InMemoryRateLimiter(60_000, 10); // 10 req/min per IP
+
+function getClientIp(req: NextRequest): string {
+  return req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    || req.headers.get('x-real-ip')
+    || 'unknown';
+}
 
 function cleanJsonResponse(text: string): string {
   let cleaned = text.trim();
@@ -13,6 +22,16 @@ function cleanJsonResponse(text: string): string {
 }
 
 export async function GET(request: NextRequest) {
+  // Rate limiting
+  const ip = getClientIp(request);
+  const { allowed, resetMs } = limiter.check(ip);
+  if (!allowed) {
+    return Response.json(
+      { error: 'Too many requests. Please try again shortly.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil(resetMs / 1000)) } }
+    );
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const chapter = parseInt(searchParams.get('chapter') || '1', 10);
   const verse = parseInt(searchParams.get('verse') || '1', 10);
@@ -28,6 +47,7 @@ export async function GET(request: NextRequest) {
     const { text } = await generateText({
       model: anthropic('claude-sonnet-4-5-20250929'),
       prompt: getVerseGenerationPrompt(chapter, verse),
+      maxOutputTokens: 4096,
       temperature: 0.3,
     });
 

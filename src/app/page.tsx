@@ -4,11 +4,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { VerseDisplay } from '@/components/VerseDisplay';
 import { VerseNavigation } from '@/components/VerseNavigation';
 import { ChatPanel } from '@/components/ChatPanel';
+import { getRandomVerse } from '@/lib/random-verse';
 import type { VerseData } from '@/types/verse';
 
 export default function Home() {
-  const [chapter, setChapter] = useState(1);
-  const [verse, setVerse] = useState(1);
+  const [initial] = useState(() => getRandomVerse());
+  const [chapter, setChapter] = useState(initial.chapter);
+  const [verse, setVerse] = useState(initial.verse);
   const [verseData, setVerseData] = useState<VerseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

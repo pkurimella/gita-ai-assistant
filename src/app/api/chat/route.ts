@@ -4,8 +4,28 @@ import { getChatSystemPrompt } from '@/lib/system-prompts';
 import { validateChatMessage } from '@/lib/input-validation';
 import { validateVerseReferences } from '@/lib/output-validation';
 import { isValidVerse } from '@/lib/gita-metadata';
+import { InMemoryRateLimiter } from '@/lib/rate-limiter';
+
+const limiter = new InMemoryRateLimiter(60_000, 20); // 20 req/min per IP
+
+function getClientIp(req: Request): string {
+  const headers = req.headers;
+  return headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    || headers.get('x-real-ip')
+    || 'unknown';
+}
 
 export async function POST(req: Request) {
+  // Rate limiting
+  const ip = getClientIp(req);
+  const { allowed, resetMs } = limiter.check(ip);
+  if (!allowed) {
+    return Response.json(
+      { error: 'Too many requests. Please try again shortly.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil(resetMs / 1000)) } }
+    );
+  }
+
   const {
     messages,
     verseContext,
@@ -20,7 +40,6 @@ export async function POST(req: Request) {
     };
   } = await req.json();
 
-  // Validate verse context
   if (
     !verseContext ||
     !isValidVerse(verseContext.chapter, verseContext.verse)
@@ -31,7 +50,6 @@ export async function POST(req: Request) {
     );
   }
 
-  // Validate the latest user message
   const latestMessage = messages[messages.length - 1];
   if (latestMessage?.role === 'user') {
     const textContent = latestMessage.parts
@@ -57,7 +75,6 @@ export async function POST(req: Request) {
     maxOutputTokens: 2000,
     temperature: 0.7,
     onFinish: ({ text }) => {
-      // Post-stream output validation (logged, not blocked)
       const outputValidation = validateVerseReferences(text);
       if (!outputValidation.valid) {
         console.warn(
