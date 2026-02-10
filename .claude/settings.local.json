@@ -9,7 +9,27 @@
       "Bash(timeout 15 npm run dev:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial scaffold: Next.js 16 + TypeScript + Tailwind + Vercel AI SDK\n\nProject setup with:\n- Next.js 16.1.6 \\(App Router, TypeScript, Tailwind CSS\\)\n- Vercel AI SDK \\(ai, @ai-sdk/react, @ai-sdk/anthropic\\)\n- Project planning docs \\(CLAUDE.md, PRD.md, TASKS.md\\)\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial scaffold: Next.js 16 + TypeScript + Tailwind + Vercel AI SDK\n\nProject setup with:\n- Next.js 16.1.6 \\(App Router, TypeScript, Tailwind CSS\\)\n- Vercel AI SDK \\(ai, @ai-sdk/react, @ai-sdk/anthropic\\)\n- Project planning docs \\(CLAUDE.md, PRD.md, TASKS.md\\)\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(npx tsc:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd Gita design system, core data layer, and security utilities\n\n- Design tokens: saffron, Krishna blue, gold, parchment color palette\n- Fonts: Tiro Devanagari Sanskrit, Crimson Text, Inter\n- OrnamentalDivider component with Om/lotus/dot symbols\n- Gita metadata: 18 chapters with verse counts, navigation helpers\n- System prompts with XML-tagged security directives\n- Input validation: length limits, jailbreak pattern detection\n- Output validation: verse reference verification\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd verse API, display components, and main page layout\n\n- GET /api/verse: generates verse data via Claude with JSON validation\n- VerseDisplay: manuscript-style rendering with ornamental dividers,\n  Sanskrit card with parchment gradient + saffron border\n- VerseNavigation: chapter/verse dropdowns, prev/next with 44px targets\n- Main page: two-panel layout \\(verse left, chat placeholder right\\)\n- Header with Om symbol and Gita-themed styling\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(node -e:*)",
+      "Bash(timeout:*)",
+      "Bash(ping:*)",
+      "Bash(npx next dev:*)",
+      "Bash(curl:*)",
+      "Bash(npx tsx:*)",
+      "WebFetch(domain:www.holybhagavadgita.org)",
+      "WebFetch(domain:www.holy-bhagavad-gita.org)",
+      "WebFetch(domain:vivekavani.com)",
+      "Bash(npx next build)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd chat feature with streaming, security tests, and responsive polish\n\n- Chat API with input validation, prompt injection defense, and streaming\n- ChatPanel with SDK v6 useChat + sendMessage API\n- ChatMessage with themed user/assistant bubbles\n- Security test suite covering input validation, output validation, metadata, and API endpoints\n- Sticky header and mobile chat height constraint\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(lsof:*)",
+      "Bash(xargs:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(echo:*)",
+      "Bash(printenv:*)"
     ]
   }
 }

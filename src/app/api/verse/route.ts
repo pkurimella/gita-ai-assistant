@@ -1,5 +1,5 @@
 import { generateText } from 'ai';
-import { anthropic } from '@ai-sdk/anthropic';
+import { anthropic } from '@/lib/ai-provider';
 import { getVerseGenerationPrompt } from '@/lib/system-prompts';
 import { isValidVerse } from '@/lib/gita-metadata';
 import { NextRequest } from 'next/server';
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const { text } = await generateText({
-      model: anthropic('claude-sonnet-4-20250514'),
+      model: anthropic('claude-sonnet-4-5-20250929'),
       prompt: getVerseGenerationPrompt(chapter, verse),
       temperature: 0.3,
     });

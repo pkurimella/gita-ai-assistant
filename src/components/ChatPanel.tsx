@@ -20,23 +20,29 @@ export function ChatPanel({ verseData }: ChatPanelProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState('');
 
+  const verseDataRef = useRef(verseData);
+  verseDataRef.current = verseData;
+
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
         api: '/api/chat',
-        body: verseData
-          ? {
-              verseContext: {
-                chapter: verseData.chapter,
-                verse: verseData.verse,
-                sanskrit: verseData.sanskrit,
-                translation: verseData.translation,
-                commentary: verseData.commentary,
-              },
-            }
-          : undefined,
+        body: () => {
+          const vd = verseDataRef.current;
+          return vd
+            ? {
+                verseContext: {
+                  chapter: vd.chapter,
+                  verse: vd.verse,
+                  sanskrit: vd.sanskrit,
+                  translation: vd.translation,
+                  commentary: vd.commentary,
+                },
+              }
+            : {};
+        },
       }),
-    [verseData]
+    [] // stable transport — body callback reads from ref
   );
 
   const { messages, sendMessage, status, error, setMessages } =
