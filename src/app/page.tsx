@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { VerseDisplay } from '@/components/VerseDisplay';
 import { VerseNavigation } from '@/components/VerseNavigation';
+import { ChatPanel } from '@/components/ChatPanel';
 import type { VerseData } from '@/types/verse';
 
 export default function Home() {
@@ -42,7 +43,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-gold/40 bg-parchment-light/80 backdrop-blur-sm px-6 py-4">
+      <header className="sticky top-0 z-10 border-b border-gold/40 bg-parchment-light/80 backdrop-blur-sm px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center gap-3">
           <span className="font-sanskrit text-3xl text-saffron opacity-80">
             {'\u0950'}
@@ -73,13 +74,9 @@ export default function Home() {
           />
         </div>
 
-        {/* Right panel: Chat (placeholder for now) */}
-        <div className="w-full lg:w-[440px] lg:max-h-[calc(100vh-80px)] flex flex-col border-t lg:border-t-0 border-gold/30 bg-parchment-light/50">
-          <div className="flex-1 flex items-center justify-center p-6">
-            <p className="text-blue-muted text-sm text-center font-serif italic">
-              Chat panel coming soon...
-            </p>
-          </div>
+        {/* Right panel: Chat */}
+        <div className="w-full h-[60vh] lg:h-auto lg:w-[440px] lg:max-h-[calc(100vh-80px)] flex flex-col border-t lg:border-t-0 border-gold/30 bg-parchment-light/50">
+          <ChatPanel verseData={verseData} />
         </div>
       </div>
     </main>
