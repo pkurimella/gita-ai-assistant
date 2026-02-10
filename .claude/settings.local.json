@@ -36,7 +36,10 @@
       "Bash(npx vitest:*)",
       "Bash(npm run build:*)",
       "Bash(npm run dev:*)",
-      "WebFetch(domain:docs.anthropic.com)"
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(tasklist:*)",
+      "Bash(heroku --version:*)",
+      "Bash(heroku apps:*)"
     ]
   }
 }

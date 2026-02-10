@@ -1,11 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // ---------------------------------------------------------------------------
-  // Admin route protection (cookie-existence check only — Edge Runtime can't
-  // access the in-memory session Map; full validation happens in API routes)
+  // Admin route protection (cookie-existence check only — full validation
+  // happens in API routes via the in-memory session Map)
   // ---------------------------------------------------------------------------
 
   const isAdminPage = pathname.startsWith('/admin') && pathname !== '/admin/login';
