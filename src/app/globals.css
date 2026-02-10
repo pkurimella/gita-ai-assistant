@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Saffron — devotion, purification, fire */
+  --color-saffron: #FF902B;
+  --color-saffron-dark: #D97706;
+  --color-saffron-light: #FFB366;
+
+  /* Gold — divine consciousness */
+  --color-gold: #D4A574;
+  --color-gold-light: #F7E6CA;
+
+  /* Krishna Blue — infinite divine love */
+  --color-krishna-blue: #1B3A70;
+  --color-blue-muted: #4A5A8C;
+  --color-blue-calm: #5A7BA7;
+
+  /* Parchment — aged manuscript */
+  --color-parchment: #F1E9D2;
+  --color-parchment-light: #FCF5E5;
+  --color-vellum: #EBD5B3;
+  --color-cream: #FFF8DC;
+
+  /* Text */
+  --color-text-primary: #2C3E50;
+  --color-text-secondary: #4A4A4A;
+
+  /* Accent */
+  --color-burgundy: #8B3A3A;
+
+  /* Gradients */
+  --gradient-parchment: linear-gradient(135deg, #F1E9D2 0%, #FFF8DC 50%, #EBD5B3 100%);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-saffron: var(--color-saffron);
+  --color-saffron-dark: var(--color-saffron-dark);
+  --color-saffron-light: var(--color-saffron-light);
+  --color-gold: var(--color-gold);
+  --color-gold-light: var(--color-gold-light);
+  --color-krishna-blue: var(--color-krishna-blue);
+  --color-blue-muted: var(--color-blue-muted);
+  --color-blue-calm: var(--color-blue-calm);
+  --color-parchment: var(--color-parchment);
+  --color-parchment-light: var(--color-parchment-light);
+  --color-vellum: var(--color-vellum);
+  --color-cream: var(--color-cream);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-burgundy: var(--color-burgundy);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-crimson-text);
+  --font-sanskrit: var(--font-tiro-devanagari-sanskrit);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--gradient-parchment);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar for verse panel */
+.verse-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.verse-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-parchment-light);
+}
+
+.verse-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: 3px;
+}
+
+.verse-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-saffron);
 }
