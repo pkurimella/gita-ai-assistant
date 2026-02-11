@@ -17,7 +17,7 @@
     "generate-verses:sequential": "tsx scripts/generate-verses.ts sequential",
     "generate-audio": "tsx scripts/generate-audio.ts generate",
     "generate-audio:status": "tsx scripts/generate-audio.ts status",
-    "heroku-postbuild": "npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static && cp -r data .next/standalone/data"
+    "heroku-postbuild": "npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static && cp -r data .next/standalone/data && rm -rf data/audio"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.40",
