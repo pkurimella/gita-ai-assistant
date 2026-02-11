@@ -39,7 +39,14 @@
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(tasklist:*)",
       "Bash(heroku --version:*)",
-      "Bash(heroku apps:*)"
+      "Bash(heroku apps:*)",
+      "Bash(git status:*)",
+      "Bash(heroku create:*)",
+      "Bash(heroku config:set:*)",
+      "Bash(heroku logs:*)",
+      "Bash(npm view:*)",
+      "Bash(dir \"C:\\\\Workspace\\\\claude-workspace\\\\gita-ai-assistant\\\\data\")",
+      "Bash(npm ls:*)"
     ]
   }
 }

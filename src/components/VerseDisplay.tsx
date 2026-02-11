@@ -3,6 +3,7 @@
 import type { VerseData } from '@/types/verse';
 import { OrnamentalDivider } from './OrnamentalDivider';
 import { SacredLoader } from './SacredLoader';
+import { AudioPlayer } from './AudioPlayer';
 
 interface VerseDisplayProps {
   verseData: VerseData | null;
@@ -46,12 +47,14 @@ export function VerseDisplay({ verseData, loading, error }: VerseDisplayProps) {
       <OrnamentalDivider symbol="om" />
 
       {/* Sanskrit text card */}
-      <div className="relative bg-gradient-to-br from-parchment to-cream rounded-lg p-5 border-l-4 border-saffron shadow-[inset_0_0_15px_rgba(139,90,43,0.05)]">
+      <div className="relative bg-gradient-to-br from-parchment to-cream rounded-lg p-5 pb-14 border-l-4 border-saffron shadow-[inset_0_0_15px_rgba(139,90,43,0.05)]">
         <span className="absolute top-2 left-3 text-gold/30 text-xs">✦</span>
-        <span className="absolute bottom-2 right-3 text-gold/30 text-xs">✦</span>
         <p className="text-xl font-sanskrit leading-relaxed text-krishna-blue text-center">
           {verseData.sanskrit}
         </p>
+        <div className="absolute bottom-3 right-3">
+          <AudioPlayer chapter={verseData.chapter} verse={verseData.verse} />
+        </div>
       </div>
 
       <OrnamentalDivider symbol="dot" />

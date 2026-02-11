@@ -15,6 +15,8 @@
     "generate-verses:status": "tsx scripts/generate-verses.ts status",
     "generate-verses:collect": "tsx scripts/generate-verses.ts collect",
     "generate-verses:sequential": "tsx scripts/generate-verses.ts sequential",
+    "generate-audio": "tsx scripts/generate-audio.ts generate",
+    "generate-audio:status": "tsx scripts/generate-audio.ts status",
     "heroku-postbuild": "npm run build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static && cp -r data .next/standalone/data"
   },
   "dependencies": {
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
+    "@elevenlabs/elevenlabs-js": "^2.35.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
